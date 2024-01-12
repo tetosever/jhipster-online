@@ -20,13 +20,21 @@
 package io.github.jhipster.online.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.jhipster.online.config.Constants;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -51,7 +59,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Pattern(regexp = ConstantsDomain.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     private String login;
