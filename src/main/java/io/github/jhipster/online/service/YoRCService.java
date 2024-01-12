@@ -26,7 +26,7 @@ import io.github.jhipster.online.config.CacheConfiguration;
 import io.github.jhipster.online.domain.GeneratorIdentity;
 import io.github.jhipster.online.domain.YoRC;
 import io.github.jhipster.online.domain.YoRC_;
-import io.github.jhipster.online.domain.deserializer.YoRCDeserializer;
+import io.github.jhipster.online.domain.YoRCDeserializer;
 import io.github.jhipster.online.domain.enums.YoRCColumn;
 import io.github.jhipster.online.repository.YoRCRepository;
 import io.github.jhipster.online.service.dto.*;
