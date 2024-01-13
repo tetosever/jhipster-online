@@ -60,7 +60,7 @@ public class StatisticsResource {
 
     private final UserService userService;
 
-    private final GeneratorIdentityService generatorIdentityService;
+    private final GeneratorIdentityServiceHLC generatorIdentityServiceHlc;
 
     private final EntityStatsService entityStatService;
 
@@ -70,7 +70,7 @@ public class StatisticsResource {
         JdlService jdlService,
         SubGenEventService subGenEventService,
         UserService userService,
-        GeneratorIdentityService generatorIdentityService,
+        GeneratorIdentityServiceHLC generatorIdentityServiceHlc,
         EntityStatsService entityStatService
     ) {
         this.statisticsService = statisticsService;
@@ -78,7 +78,7 @@ public class StatisticsResource {
         this.jdlService = jdlService;
         this.subGenEventService = subGenEventService;
         this.userService = userService;
-        this.generatorIdentityService = generatorIdentityService;
+        this.generatorIdentityServiceHlc = generatorIdentityServiceHlc;
         this.entityStatService = entityStatService;
     }
 
@@ -197,7 +197,7 @@ public class StatisticsResource {
         generatorId = SanitizeInputs.sanitizeInput(generatorId);
         log.info("Binding current user to generator {}", generatorId);
 
-        if (generatorIdentityService.bindUserToGenerator(userService.getUser(), generatorId)) {
+        if (generatorIdentityServiceHlc.bindUserToGenerator(userService.getUser(), generatorId)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("It seems that this generator is already bound to a user.", HttpStatus.CONFLICT);
@@ -209,7 +209,7 @@ public class StatisticsResource {
         generatorId = SanitizeInputs.sanitizeInput(generatorId);
         log.info("Unbinding current user to generator {}", generatorId);
 
-        if (generatorIdentityService.unbindUserFromGenerator(userService.getUser(), generatorId)) {
+        if (generatorIdentityServiceHlc.unbindUserFromGenerator(userService.getUser(), generatorId)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("This generator doesn't exist or you don't own it.", HttpStatus.BAD_REQUEST);

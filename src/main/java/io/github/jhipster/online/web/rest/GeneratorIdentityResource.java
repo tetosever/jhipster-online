@@ -21,6 +21,7 @@ package io.github.jhipster.online.web.rest;
 
 import io.github.jhipster.online.domain.GeneratorIdentity;
 import io.github.jhipster.online.service.GeneratorIdentityService;
+import io.github.jhipster.online.service.GeneratorIdentityServiceHLC;
 import io.github.jhipster.online.service.UserService;
 import io.github.jhipster.online.service.dto.GeneratorIdentityDTO;
 import io.github.jhipster.online.web.rest.errors.BadRequestAlertException;
@@ -50,12 +51,12 @@ public class GeneratorIdentityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final GeneratorIdentityService generatorIdentityService;
+    private final GeneratorIdentityServiceHLC generatorIdentityServiceHlc;
 
     private final UserService userService;
 
-    public GeneratorIdentityResource(GeneratorIdentityService generatorIdentityService, UserService userService) {
-        this.generatorIdentityService = generatorIdentityService;
+    public GeneratorIdentityResource(GeneratorIdentityServiceHLC generatorIdentityServiceHlc, UserService userService) {
+        this.generatorIdentityServiceHlc = generatorIdentityServiceHlc;
         this.userService = userService;
     }
 
@@ -73,7 +74,7 @@ public class GeneratorIdentityResource {
         if (generatorIdentity.getId() != null) {
             throw new BadRequestAlertException("A new generatorIdentity cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        GeneratorIdentityDTO result = generatorIdentityService.save(generatorIdentity);
+        GeneratorIdentityDTO result = generatorIdentityServiceHlc.save(generatorIdentity);
         return ResponseEntity
             .created(new URI("/api/generator-identities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -94,7 +95,7 @@ public class GeneratorIdentityResource {
         if (generatorIdentity.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        GeneratorIdentityDTO result = generatorIdentityService.save(generatorIdentity);
+        GeneratorIdentityDTO result = generatorIdentityServiceHlc.save(generatorIdentity);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, generatorIdentity.getId().toString()))
@@ -109,7 +110,7 @@ public class GeneratorIdentityResource {
     @GetMapping("/generator-identities")
     public List<GeneratorIdentity> getAllGeneratorIdentities() {
         log.debug("REST request to get all GeneratorIdentities");
-        return generatorIdentityService.findAll();
+        return generatorIdentityServiceHlc.findAll();
     }
 
     /**
@@ -121,7 +122,7 @@ public class GeneratorIdentityResource {
     @GetMapping("/generator-identities/{id}")
     public ResponseEntity<GeneratorIdentity> getGeneratorIdentity(@PathVariable Long id) {
         log.debug("REST request to get GeneratorIdentity : {}", id);
-        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityService.findOne(id);
+        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityServiceHlc.findOne(id);
         return ResponseUtil.wrapOrNotFound(generatorIdentity);
     }
 
@@ -134,7 +135,7 @@ public class GeneratorIdentityResource {
     @DeleteMapping("/generator-identities/{id}")
     public ResponseEntity<Void> deleteGeneratorIdentity(@PathVariable Long id) {
         log.debug("REST request to delete GeneratorIdentity : {}", id);
-        generatorIdentityService.delete(id);
+        generatorIdentityServiceHlc.delete(id);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
@@ -149,6 +150,6 @@ public class GeneratorIdentityResource {
     @GetMapping("/generator-identities/owned")
     public List<GeneratorIdentity> getAllOwnedGeneratorIdentities() {
         log.debug("REST request to get all owned GeneratorIdentities");
-        return generatorIdentityService.findAllOwned(userService.getUser());
+        return generatorIdentityServiceHlc.findAllOwned(userService.getUser());
     }
 }

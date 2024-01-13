@@ -47,7 +47,7 @@ public class StatisticsService {
 
     private final YoRCService yoRCService;
 
-    private final GeneratorIdentityService generatorIdentityService;
+    private final GeneratorIdentityServiceHLC generatorIdentityServiceHlc;
 
     private final SubGenEventService subGenEventService;
 
@@ -61,7 +61,7 @@ public class StatisticsService {
 
     public StatisticsService(
         YoRCService yoRCService,
-        GeneratorIdentityService generatorIdentityService,
+        GeneratorIdentityServiceHLC generatorIdentityServiceHlc,
         SubGenEventService subGenEventService,
         EntityStatsService entityStatsService,
         SubGenEventMapper subGenEventMapper,
@@ -69,7 +69,7 @@ public class StatisticsService {
         YoRCMapper yoRCMapper
     ) {
         this.yoRCService = yoRCService;
-        this.generatorIdentityService = generatorIdentityService;
+        this.generatorIdentityServiceHlc = generatorIdentityServiceHlc;
         this.subGenEventService = subGenEventService;
         this.entityStatsService = entityStatsService;
         this.subGenEventMapper = subGenEventMapper;
@@ -114,7 +114,7 @@ public class StatisticsService {
         log.info("Adding an entry for generator {}.", generatorGuid);
         this.tryToCreateGeneratorIdentityAndIgnoreErrors(generatorGuid);
 
-        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityService.findOneByGuid(generatorGuid);
+        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityServiceHlc.findOneByGuid(generatorGuid);
 
         if (generatorIdentity.isPresent()) {
             generatorIdentity.get().host(host);
@@ -134,7 +134,7 @@ public class StatisticsService {
         DateUtil.setAbsoluteDate(subGenEvent, now);
 
         this.tryToCreateGeneratorIdentityAndIgnoreErrors(generatorGuid);
-        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityService.findOneByGuid(generatorGuid);
+        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityServiceHlc.findOneByGuid(generatorGuid);
 
         subGenEvent.date(now);
         if (generatorIdentity.isPresent()) {
@@ -153,7 +153,7 @@ public class StatisticsService {
         DateUtil.setAbsoluteDate(entityStats, now);
 
         this.tryToCreateGeneratorIdentityAndIgnoreErrors(generatorGuid);
-        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityService.findOneByGuid(generatorGuid);
+        Optional<GeneratorIdentity> generatorIdentity = generatorIdentityServiceHlc.findOneByGuid(generatorGuid);
 
         entityStats.date(now);
         if (generatorIdentity.isPresent()) {
@@ -166,7 +166,7 @@ public class StatisticsService {
 
     @Transactional
     public void deleteStatistics(User owner) {
-        List<GeneratorIdentity> generators = generatorIdentityService.findAllOwned(owner);
+        List<GeneratorIdentity> generators = generatorIdentityServiceHlc.findAllOwned(owner);
 
         log.debug("Statistics data deletion requested for : {} ({} generator(s)) ", owner.getLogin(), generators.size());
 
@@ -180,7 +180,7 @@ public class StatisticsService {
 
     public void tryToCreateGeneratorIdentityAndIgnoreErrors(String generatorGuid) {
         try {
-            generatorIdentityService.tryToCreateGeneratorIdentity(generatorGuid);
+            generatorIdentityServiceHlc.tryToCreateGeneratorIdentity(generatorGuid);
         } catch (RuntimeException re) {
             log.debug("GeneratorIdentity {} could not be created, ignoring", generatorGuid);
         }

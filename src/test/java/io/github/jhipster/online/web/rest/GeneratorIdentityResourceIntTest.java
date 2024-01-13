@@ -28,6 +28,7 @@ import io.github.jhipster.online.JhonlineApp;
 import io.github.jhipster.online.domain.GeneratorIdentity;
 import io.github.jhipster.online.repository.GeneratorIdentityRepository;
 import io.github.jhipster.online.service.GeneratorIdentityService;
+import io.github.jhipster.online.service.GeneratorIdentityServiceHLC;
 import io.github.jhipster.online.service.UserService;
 import io.github.jhipster.online.service.dto.GeneratorIdentityDTO;
 import io.github.jhipster.online.service.mapper.GeneratorIdentityMapper;
@@ -70,7 +71,7 @@ class GeneratorIdentityResourceIntTest {
     private UserService userService;
 
     @Autowired
-    private GeneratorIdentityService generatorIdentityService;
+    private GeneratorIdentityServiceHLC generatorIdentityService;
 
     @Autowired
     private GeneratorIdentityMapper generatorIdentityMapper;

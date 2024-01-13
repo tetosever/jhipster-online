@@ -62,7 +62,7 @@ class StatisticsResourceIntTest {
     private UserService userService;
 
     @Autowired
-    private GeneratorIdentityService generatorIdentityService;
+    private GeneratorIdentityServiceHLC generatorIdentityService;
 
     @Autowired
     private GeneratorIdentityRepository generatorIdentityRepository;
