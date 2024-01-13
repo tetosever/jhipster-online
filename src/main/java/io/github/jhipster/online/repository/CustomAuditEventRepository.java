@@ -18,7 +18,6 @@
  */
 package io.github.jhipster.online.repository;
 
-import io.github.jhipster.online.config.Constants;
 import io.github.jhipster.online.config.audit.AuditEventConverter;
 import io.github.jhipster.online.domain.PersistentAuditEvent;
 import java.time.Instant;
@@ -73,7 +72,7 @@ public class CustomAuditEventRepository implements AuditEventRepository {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void add(AuditEvent event) {
-        if (!AUTHORIZATION_FAILURE.equals(event.getType()) && !Constants.ANONYMOUS_USER.equals(event.getPrincipal())) {
+        if (!AUTHORIZATION_FAILURE.equals(event.getType()) && !ConstantsRepository.ANONYMOUS_USER.equals(event.getPrincipal())) {
             PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
             persistentAuditEvent.setPrincipal(event.getPrincipal());
             persistentAuditEvent.setAuditEventType(event.getType());
