@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
-public final class QueryUtil {
+public class QueryUtil {
 
     public static final String DATE = "date";
 
     public static final String TYPE = "type";
 
-    private QueryUtil() {
+    public QueryUtil() {
         throw new IllegalStateException("Utility class");
     }
 

@@ -30,7 +30,7 @@ import io.github.jhipster.online.service.dto.TemporalCountDTO;
 import io.github.jhipster.online.service.dto.TemporalDistributionDTO;
 import io.github.jhipster.online.service.enums.TemporalValueType;
 import io.github.jhipster.online.service.mapper.SubGenEventMapper;
-import io.github.jhipster.online.service.util.QueryUtil;
+import io.github.jhipster.online.service.util.QueryUtilHLC;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -124,8 +124,8 @@ public class SubGenEventService {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<RawSQLField> query = builder.createQuery(RawSQLField.class);
         Root<SubGenEvent> root = query.from(SubGenEvent.class);
-        ParameterExpression<Instant> dateParameter = builder.parameter(Instant.class, QueryUtil.DATE);
-        ParameterExpression<String> typeParameter = builder.parameter(String.class, QueryUtil.TYPE);
+        ParameterExpression<Instant> dateParameter = builder.parameter(Instant.class, QueryUtilHLC.DATE);
+        ParameterExpression<String> typeParameter = builder.parameter(String.class, QueryUtilHLC.TYPE);
 
         query
             .select(
@@ -144,8 +144,8 @@ public class SubGenEventService {
 
         return entityManager
             .createQuery(query)
-            .setParameter(QueryUtil.DATE, after)
-            .setParameter(QueryUtil.TYPE, field.getDatabaseValue())
+            .setParameter(QueryUtilHLC.DATE, after)
+            .setParameter(QueryUtilHLC.TYPE, field.getDatabaseValue())
             .getResultList()
             .stream()
             .map(

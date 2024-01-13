@@ -25,14 +25,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.jhipster.online.config.CacheConfiguration;
 import io.github.jhipster.online.domain.GeneratorIdentity;
 import io.github.jhipster.online.domain.YoRC;
-import io.github.jhipster.online.domain.YoRC_;
 import io.github.jhipster.online.domain.YoRCDeserializer;
+import io.github.jhipster.online.domain.YoRC_;
 import io.github.jhipster.online.domain.enums.YoRCColumn;
 import io.github.jhipster.online.repository.YoRCRepository;
 import io.github.jhipster.online.service.dto.*;
 import io.github.jhipster.online.service.enums.TemporalValueType;
 import io.github.jhipster.online.service.mapper.YoRCMapper;
-import io.github.jhipster.online.service.util.QueryUtil;
+import io.github.jhipster.online.service.util.QueryUtilHLC;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -150,21 +150,21 @@ public class YoRCService {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<RawSQL> query = builder.createQuery(RawSQL.class);
         Root<YoRC> root = query.from(YoRC.class);
-        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtil.DATE);
+        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtilHLC.DATE);
 
         query
             .select(builder.construct(RawSQL.class, root.get(dbTemporalFunction.getFieldName()), builder.count(root)))
             .where(builder.greaterThan(root.get(YoRC_.creationDate).as(Instant.class), parameter))
             .groupBy(root.get(dbTemporalFunction.getFieldName()));
 
-        return QueryUtil.createCountQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
+        return QueryUtilHLC.createCountQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
     }
 
     public List<TemporalDistributionDTO> getFieldCount(Instant after, YoRCColumn field, TemporalValueType dbTemporalFunction) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<RawSQLField> query = builder.createQuery(RawSQLField.class);
         Root<YoRC> root = query.from(YoRC.class);
-        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtil.DATE);
+        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtilHLC.DATE);
 
         query
             .select(
@@ -178,6 +178,6 @@ public class YoRCService {
             .where(builder.greaterThan(root.get(YoRC_.creationDate).as(Instant.class), parameter))
             .groupBy(root.get(field.getDatabaseValue()), root.get(dbTemporalFunction.getFieldName()));
 
-        return QueryUtil.createDistributionQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
+        return QueryUtilHLC.createDistributionQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
     }
 }

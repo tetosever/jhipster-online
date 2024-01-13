@@ -27,7 +27,7 @@ import io.github.jhipster.online.repository.EntityStatsRepository;
 import io.github.jhipster.online.service.dto.*;
 import io.github.jhipster.online.service.enums.TemporalValueType;
 import io.github.jhipster.online.service.mapper.EntityStatsMapper;
-import io.github.jhipster.online.service.util.QueryUtil;
+import io.github.jhipster.online.service.util.QueryUtilHLC;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -121,21 +121,21 @@ public class EntityStatsService {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<RawSQL> query = builder.createQuery(RawSQL.class);
         Root<EntityStats> root = query.from(EntityStats.class);
-        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtil.DATE);
+        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtilHLC.DATE);
 
         query
             .select(builder.construct(RawSQL.class, root.get(dbTemporalFunction.getFieldName()), builder.count(root)))
             .where(builder.greaterThan(root.get(EntityStats_.date).as(Instant.class), parameter))
             .groupBy(root.get(dbTemporalFunction.getFieldName()));
 
-        return QueryUtil.createCountQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
+        return QueryUtilHLC.createCountQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
     }
 
     public List<TemporalDistributionDTO> getFieldCount(Instant after, EntityStatColumn field, TemporalValueType dbTemporalFunction) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<RawSQLField> query = builder.createQuery(RawSQLField.class);
         Root<EntityStats> root = query.from(EntityStats.class);
-        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtil.DATE);
+        ParameterExpression<Instant> parameter = builder.parameter(Instant.class, QueryUtilHLC.DATE);
 
         query
             .select(
@@ -149,6 +149,6 @@ public class EntityStatsService {
             .where(builder.greaterThan(root.get(EntityStats_.date).as(Instant.class), parameter))
             .groupBy(root.get(field.getDatabaseValue()), root.get(dbTemporalFunction.getFieldName()));
 
-        return QueryUtil.createDistributionQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
+        return QueryUtilHLC.createDistributionQueryAndCollectData(after, dbTemporalFunction, query, entityManager);
     }
 }
